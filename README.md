@@ -8,43 +8,70 @@ curl -fsSL https://raw.githubusercontent.com/gwardwell/dotfiles/main/install.sh 
 
 ## SSH Keys for GitHub
 
-The install script will set up a new SSH key for use with GitHub.
-
-During installation it will ask for a GitHub email address:
+During installation, you'll be asked how to set up SSH:
 
 ```
-🔑 Setting up SSH key for GitHub...
+🔑 Setting up SSH for GitHub...
 
-Enter your GitHub email address:
+How would you like to manage SSH keys?
+   1) 1Password SSH Agent (recommended)
+   2) Traditional SSH key (generate new key)
+   3) Skip (SSH already configured)
 ```
 
-Once an email address is entered, it will:
+### Option 1: 1Password SSH Agent (Recommended)
 
-- Generate an SSH key
-- Add the key to Apple Keychain
-- Set up `.ssh/config`
-- Copy the public key to clipboard
+Uses 1Password to manage your SSH keys with Touch ID authentication.
 
-It will then display the following instructions:
+**During install:**
+
+1. Select option `1` for 1Password
+2. Choose whether to create a new key or use an existing one:
 
 ```
-✅ SSH key generated and copied to clipboard!"
-
-📝 Next: Add your SSH key to GitHub:
-   1. Go to https://github.com/settings/ssh/new
-   2. Paste the key from your clipboard
-   3. Give it a name (e.g., 'MacBook Pro')
-
-Press Enter after you've added the key to GitHub...
+Do you have an SSH key in 1Password already?
+   1) No - Create a new SSH key
+   2) Yes - I have an existing key in 1Password
 ```
 
-Once that is complete and `Enter` is pressed, the install script will continue.
+**If creating a new key**, the script guides you through:
+
+- Enabling the SSH agent in 1Password settings
+- Creating a new Ed25519 SSH key in 1Password
+- Adding the public key to GitHub
+
+**If using an existing key**, the script confirms:
+
+- SSH agent is enabled
+- Key is in a supported vault (Personal, Private, or Employee)
+- Public key is already on GitHub
+
+**Benefits:**
+
+- Keys secured by 1Password
+- Touch ID to authorize SSH requests
+- Easy key management across devices
+- Works with multiple GitHub accounts
+- Keys never leave 1Password
+
+### Option 2: Traditional SSH Key
+
+Generates a new SSH key and stores it locally.
+
+**During install:**
+
+1. Select option `2`
+2. Enter your GitHub email
+3. Key is generated and copied to clipboard
+4. Paste at https://github.com/settings/ssh/new
 
 ### Multiple GitHub Accounts
 
-If managing a GitHub situation with separate personal/OSS and private company GitHub accounts, the standard SSH config won't work.
+If managing separate personal and employer GitHub accounts:
 
-In that case, update `~/.ssh/config` to handle custom hosts:
+**With 1Password:** Store multiple SSH keys in 1Password. Configure each with a different vault or tag.
+
+**With traditional keys:** Update `~/.ssh/config`:
 
 ```
 Host personal
@@ -58,7 +85,7 @@ Host employer
     IdentityFile ~/.ssh/id_ed25519_employer
 ```
 
-There are already zsh aliases to handle flipping between these hosts.
+There are zsh aliases in `aliases-employer.zsh` to handle flipping between these hosts.
 
 ## Manual Configuration Steps
 

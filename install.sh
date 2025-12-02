@@ -183,49 +183,173 @@ if [ -f "$WALLPAPER" ]; then
     echo ""
 fi
 
-# Set up SSH key for GitHub
-if [ ! -f "$HOME/.ssh/id_ed25519" ]; then
-    echo "🔑 Setting up SSH key for GitHub..."
-    echo ""
-    echo "Enter your GitHub email address:"
-    read -r github_email
+# Set up SSH for GitHub
+echo "🔑 Setting up SSH for GitHub..."
+echo ""
+echo "How would you like to manage SSH keys?"
+echo "   1) 1Password SSH Agent (recommended)"
+echo "   2) Traditional SSH key (generate new key)"
+echo "   3) Skip (SSH already configured)"
+echo ""
+read -p "Enter choice [1/2/3]: " ssh_choice
 
-    # Generate SSH key
-    ssh-keygen -t ed25519 -C "$github_email" -f "$HOME/.ssh/id_ed25519" -N ""
+case $ssh_choice in
+    1)
+        # 1Password SSH Agent setup
+        echo ""
+        echo "📝 Setting up 1Password SSH Agent..."
 
-    # Start ssh-agent and add key
-    eval "$(ssh-agent -s)"
+        mkdir -p "$HOME/.ssh"
 
-    # Add to macOS keychain
-    ssh-add --apple-use-keychain "$HOME/.ssh/id_ed25519"
+        # Create SSH config for 1Password
+        if ! grep -q "1Password" "$HOME/.ssh/config" 2>/dev/null; then
+            cat >> "$HOME/.ssh/config" << 'EOF'
 
-    # Create/update SSH config for macOS keychain
-    mkdir -p "$HOME/.ssh"
-    if ! grep -q "UseKeychain yes" "$HOME/.ssh/config" 2>/dev/null; then
-        cat >> "$HOME/.ssh/config" << EOF
+# 1Password SSH Agent
+Host *
+    IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+EOF
+        fi
+
+        echo ""
+        echo "✅ SSH config updated for 1Password!"
+        echo ""
+        echo "Do you have an SSH key in 1Password already?"
+        echo "   1) No - Create a new SSH key"
+        echo "   2) Yes - I have an existing key in 1Password"
+        echo ""
+        read -p "Enter choice [1/2]: " op_key_choice
+
+        case $op_key_choice in
+            1)
+                # Create new key
+                echo ""
+                echo "📝 Let's create a new SSH key in 1Password:"
+                echo ""
+                echo "   Step 1: Enable the SSH Agent"
+                echo "   ─────────────────────────────"
+                echo "   1. Open 1Password → Settings (⌘,)"
+                echo "   2. Go to 'Developer' section"
+                echo "   3. Enable 'Use the SSH agent'"
+                echo "   4. (Optional) Enable 'Authorize using Touch ID'"
+                echo ""
+                read -p "Press Enter when the SSH agent is enabled..."
+
+                echo ""
+                echo "   Step 2: Create SSH Key"
+                echo "   ──────────────────────"
+                echo "   1. In 1Password, click '+ New Item'"
+                echo "   2. Select 'SSH Key'"
+                echo "   3. Click 'Add Private Key' → 'Generate a New Key'"
+                echo "   4. Choose 'Ed25519' (recommended)"
+                echo "   5. Give it a title (e.g., 'GitHub - Personal')"
+                echo "   6. Click 'Save'"
+                echo ""
+                read -p "Press Enter when your key is created..."
+
+                echo ""
+                echo "   Step 3: Add Public Key to GitHub"
+                echo "   ─────────────────────────────────"
+                echo "   1. In 1Password, open your new SSH Key item"
+                echo "   2. Click 'public key' to copy it"
+                echo "   3. Go to: https://github.com/settings/ssh/new"
+                echo "   4. Paste the public key"
+                echo "   5. Give it a name and click 'Add SSH key'"
+                echo ""
+
+                # Open GitHub SSH settings
+                open "https://github.com/settings/ssh/new" 2>/dev/null || true
+
+                read -p "Press Enter when you've added the key to GitHub..."
+                echo ""
+                echo "✅ 1Password SSH setup complete!"
+                ;;
+            2)
+                # Existing key
+                echo ""
+                echo "📝 Using existing SSH key from 1Password:"
+                echo ""
+                echo "   Step 1: Enable the SSH Agent (if not already)"
+                echo "   ─────────────────────────────────────────────"
+                echo "   1. Open 1Password → Settings (⌘,)"
+                echo "   2. Go to 'Developer' section"
+                echo "   3. Enable 'Use the SSH agent'"
+                echo "   4. (Optional) Enable 'Authorize using Touch ID'"
+                echo ""
+                echo "   Step 2: Verify your key is available"
+                echo "   ─────────────────────────────────────"
+                echo "   Your SSH key should be stored in your Personal,"
+                echo "   Private, or Employee vault to be available."
+                echo ""
+                echo "   Step 3: Ensure public key is on GitHub"
+                echo "   ──────────────────────────────────────"
+                echo "   If not already added, copy your public key from"
+                echo "   1Password and add it at: https://github.com/settings/keys"
+                echo ""
+                read -p "Press Enter when ready..."
+                echo ""
+                echo "✅ 1Password SSH setup complete!"
+                ;;
+            *)
+                echo "⚠️  Invalid choice. Please configure 1Password manually."
+                ;;
+        esac
+
+        echo ""
+        ;;
+    2)
+        # Traditional SSH key setup
+        if [ ! -f "$HOME/.ssh/id_ed25519" ]; then
+            echo ""
+            echo "Enter your GitHub email address:"
+            read -r github_email
+
+            # Generate SSH key
+            ssh-keygen -t ed25519 -C "$github_email" -f "$HOME/.ssh/id_ed25519" -N ""
+
+            # Start ssh-agent and add key
+            eval "$(ssh-agent -s)"
+
+            # Add to macOS keychain
+            ssh-add --apple-use-keychain "$HOME/.ssh/id_ed25519"
+
+            # Create/update SSH config for macOS keychain
+            mkdir -p "$HOME/.ssh"
+            if ! grep -q "UseKeychain yes" "$HOME/.ssh/config" 2>/dev/null; then
+                cat >> "$HOME/.ssh/config" << EOF
 
 Host github.com
     AddKeysToAgent yes
     UseKeychain yes
     IdentityFile ~/.ssh/id_ed25519
 EOF
-    fi
+            fi
 
-    # Copy public key to clipboard
-    pbcopy < "$HOME/.ssh/id_ed25519.pub"
+            # Copy public key to clipboard
+            pbcopy < "$HOME/.ssh/id_ed25519.pub"
 
-    echo "✅ SSH key generated and copied to clipboard!"
-    echo ""
-    echo "📝 Next: Add your SSH key to GitHub:"
-    echo "   1. Go to https://github.com/settings/ssh/new"
-    echo "   2. Paste the key from your clipboard"
-    echo "   3. Give it a name (e.g., 'MacBook Pro')"
-    echo ""
-    read -p "Press Enter after you've added the key to GitHub..."
-else
-    echo "✅ SSH key already exists."
-    echo ""
-fi
+            echo "✅ SSH key generated and copied to clipboard!"
+            echo ""
+            echo "📝 Next: Add your SSH key to GitHub:"
+            echo "   1. Go to https://github.com/settings/ssh/new"
+            echo "   2. Paste the key from your clipboard"
+            echo "   3. Give it a name (e.g., 'MacBook Pro')"
+            echo ""
+            read -p "Press Enter after you've added the key to GitHub..."
+        else
+            echo "✅ SSH key already exists at ~/.ssh/id_ed25519"
+            echo ""
+        fi
+        ;;
+    3)
+        echo "⏭️  Skipping SSH setup."
+        echo ""
+        ;;
+    *)
+        echo "⚠️  Invalid choice. Skipping SSH setup."
+        echo ""
+        ;;
+esac
 
 # Install global npm packages if file exists
 if [ -f "$DOTFILES_DIR/npm-globals.txt" ]; then

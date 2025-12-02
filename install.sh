@@ -41,6 +41,18 @@ brew bundle --file="$DOTFILES_DIR/Brewfile"
 echo "✅ Done installing packages."
 echo ""
 
+# Set up Git LFS
+if command -v git-lfs &> /dev/null; then
+    echo "🔧 Setting up Git LFS..."
+    git lfs install
+
+    # Fetch any LFS files that were pointers during initial clone
+    cd "$DOTFILES_DIR"
+    git lfs pull
+    echo "✅ Git LFS configured."
+    echo ""
+fi
+
 # Install Cursor extensions from Brewfile's vscode list
 if command -v cursor &> /dev/null && [ -f "$DOTFILES_DIR/Brewfile" ]; then
     echo "📦 Installing Cursor extensions..."

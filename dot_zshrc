@@ -158,9 +158,16 @@ if [ -n "$GCLOUD_SDK_PATH" ]; then
     [ -f "$GCLOUD_SDK_PATH/completion.zsh.inc" ] && . "$GCLOUD_SDK_PATH/completion.zsh.inc"
 fi
 
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
-eval "$(direnv hook zsh)"
-eval "$(mise activate zsh)"
+# Python version management
+if command -v pyenv &> /dev/null; then
+    eval "$(pyenv init --path)"
+    eval "$(pyenv init -)"
+fi
+
+# Directory-based environment variables
+command -v direnv &> /dev/null && eval "$(direnv hook zsh)"
+
+# Runtime version manager
+command -v mise &> /dev/null && eval "$(mise activate zsh)"
 
 PATH=~/.console-ninja/.bin:$PATH

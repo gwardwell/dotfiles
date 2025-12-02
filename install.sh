@@ -8,6 +8,18 @@ DOTFILES_DIR="$HOME/dotfiles"
 echo "🚀 Setting up dotfiles for $(whoami)..."
 echo ""
 
+# Check for git and install Xcode CLT if needed
+if ! command -v git &> /dev/null; then
+    echo "📦 Git not found. Installing Xcode Command Line Tools..."
+    xcode-select --install
+    echo ""
+    echo "⏳ Please complete the installation in the popup window."
+    echo "   This may take a few minutes."
+    echo ""
+    read -p "Press Enter after Xcode Command Line Tools is installed..."
+    echo ""
+fi
+
 # Clone dotfiles if not present
 if [ ! -d "$DOTFILES_DIR" ]; then
     echo "📦 Cloning dotfiles..."
@@ -53,137 +65,7 @@ if command -v git-lfs &> /dev/null; then
     echo ""
 fi
 
-# Install Cursor extensions from Brewfile's vscode list
-if command -v cursor &> /dev/null && [ -f "$DOTFILES_DIR/Brewfile" ]; then
-    echo "📦 Installing Cursor extensions..."
-    grep '^vscode "' "$DOTFILES_DIR/Brewfile" | sed 's/vscode "\(.*\)"/\1/' | while read -r ext; do
-        echo "  Installing $ext..."
-        cursor --install-extension "$ext" 2>/dev/null || echo "  ⚠️  Failed to install $ext"
-    done
-    echo "✅ Done installing Cursor extensions."
-    echo ""
-fi
-
-# Set up chezmoi with custom source directory
-CHEZMOI_SOURCE="$DOTFILES_DIR"
-
-# Configure chezmoi to use custom source directory
-mkdir -p "$HOME/.config/chezmoi"
-if [ ! -f "$HOME/.config/chezmoi/chezmoi.toml" ]; then
-    echo "⚙️  Configuring chezmoi..."
-    cat > "$HOME/.config/chezmoi/chezmoi.toml" << EOF
-sourceDir = "$CHEZMOI_SOURCE"
-EOF
-    echo "✅ Done configuring chezmoi."
-    echo ""
-fi
-
-# Initialize/apply chezmoi
-if chezmoi managed 2>/dev/null | grep -q .; then
-    echo "🔄 Applying chezmoi configuration..."
-    chezmoi apply -v
-    echo "✅ Done applying chezmoi configuration."
-else
-    echo "🎯 Initializing chezmoi..."
-    chezmoi init --source="$CHEZMOI_SOURCE" --apply
-    echo "✅ Done initializing chezmoi."
-fi
-echo ""
-
-# Install Oh My Zsh if not present
-if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    echo "💻 Installing Oh My Zsh..."
-    RUNZSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-    echo "✅ Done installing Oh My Zsh."
-    echo ""
-else
-    echo "✅ Oh My Zsh already installed."
-    echo ""
-fi
-
-# Install Oh My Zsh plugins
-ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-
-if [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]; then
-    echo "📦 Installing zsh-autosuggestions..."
-    git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
-    echo "✅ Done installing zsh-autosuggestions."
-    echo ""
-else
-    echo "✅ zsh-autosuggestions already installed."
-    echo ""
-fi
-
-if [ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]; then
-    echo "📦 Installing zsh-syntax-highlighting..."
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
-    echo "✅ Done installing zsh-syntax-highlighting."
-    echo ""
-else
-    echo "✅ zsh-syntax-highlighting already installed."
-    echo ""
-fi
-
-# Set ZSH as default shell if not already
-if [ "$SHELL" != "$(which zsh)" ]; then
-    echo "🐚 Setting ZSH as default shell..."
-    chsh -s "$(which zsh)"
-    echo "✅ Done. You'll need to log out and back in for this to take effect."
-    echo ""
-fi
-
-# Apply macOS settings if script exists
-if [ -f "$DOTFILES_DIR/scripts/macos-settings.sh" ]; then
-    echo "⚙️  Applying macOS settings..."
-    bash "$DOTFILES_DIR/scripts/macos-settings.sh"
-    echo "✅ Done applying macOS settings."
-    echo ""
-fi
-
-# Configure iTerm to use dotfiles for preferences
-if [ -d "/Applications/iTerm.app" ] || command -v iTerm &> /dev/null; then
-    echo "⚙️  Configuring iTerm preferences..."
-
-    # Set custom preferences folder
-    defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$DOTFILES_DIR/iTerm"
-
-    # Enable loading preferences from custom folder
-    defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
-
-    # Enable saving changes to custom folder
-    defaults write com.googlecode.iterm2 SaveChangesToCustomFolder -bool true
-
-    # Auto-save changes to custom folder without prompting
-    defaults write com.googlecode.iterm2 NoSyncNeverRemindPrefsChangesLostForFile_selection -int 2
-
-    echo "✅ iTerm configured to load/save preferences from ~/dotfiles/iTerm/"
-    echo ""
-fi
-
-# Set up dynamic wallpaper
-WALLPAPER="$DOTFILES_DIR/wallpaper/outset_dynamic_wallpaper.heic"
-if [ -f "$WALLPAPER" ]; then
-    echo "🖼️  Setting up dynamic wallpaper..."
-    echo ""
-    echo "📝 To apply the dynamic wallpaper:"
-    echo "   1. System Settings → Wallpaper will open"
-    echo "   2. Click 'Add Folder' or 'Add Photo'"
-    echo "   3. Navigate to: ~/dotfiles/wallpaper/"
-    echo "   4. Select the dynamic wallpaper file"
-    echo ""
-
-    # Open System Settings to Wallpaper pane (macOS 13+)
-    # Falls back to opening System Settings if the URL scheme changes
-    open "x-apple.systempreferences:com.apple.Wallpaper-Settings.extension" 2>/dev/null || \
-        open -a "System Settings" 2>/dev/null || \
-        open -a "System Preferences"
-
-    read -p "Press Enter after you've set the wallpaper..."
-    echo "✅ Wallpaper setup complete."
-    echo ""
-fi
-
-# Set up SSH for GitHub
+# Set up SSH for GitHub (after brew so 1Password is available)
 echo "🔑 Setting up SSH for GitHub..."
 echo ""
 echo "How would you like to manage SSH keys?"
@@ -199,7 +81,16 @@ case $ssh_choice in
         echo ""
         echo "📝 Setting up 1Password SSH Agent..."
 
+        # Prompt to open 1Password if not running
+        if ! pgrep -x "1Password" > /dev/null; then
+            echo "📝 Opening 1Password - please sign in if needed..."
+            open -a "1Password" 2>/dev/null || true
+            read -p "Press Enter after 1Password is open and signed in..."
+            echo ""
+        fi
+
         mkdir -p "$HOME/.ssh"
+        chmod 700 "$HOME/.ssh"
 
         # Create SSH config for 1Password
         if ! grep -q "1Password" "$HOME/.ssh/config" 2>/dev/null; then
@@ -209,6 +100,7 @@ case $ssh_choice in
 Host *
     IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 EOF
+            chmod 600 "$HOME/.ssh/config"
         fi
 
         echo ""
@@ -315,6 +207,7 @@ EOF
 
             # Create/update SSH config for macOS keychain
             mkdir -p "$HOME/.ssh"
+            chmod 700 "$HOME/.ssh"
             if ! grep -q "UseKeychain yes" "$HOME/.ssh/config" 2>/dev/null; then
                 cat >> "$HOME/.ssh/config" << EOF
 
@@ -323,6 +216,7 @@ Host github.com
     UseKeychain yes
     IdentityFile ~/.ssh/id_ed25519
 EOF
+                chmod 600 "$HOME/.ssh/config"
             fi
 
             # Copy public key to clipboard
@@ -351,6 +245,172 @@ EOF
         ;;
 esac
 
+# Update dotfiles remote to use SSH (if SSH was configured)
+if [[ "$ssh_choice" == "1" || "$ssh_choice" == "2" ]]; then
+    echo "🔗 Updating dotfiles remote to use SSH..."
+    cd "$DOTFILES_DIR"
+    git remote set-url origin git@github.com:gwardwell/dotfiles.git
+    echo "✅ Remote updated. You can now push changes via SSH."
+    echo ""
+fi
+
+# Install Cursor extensions from Brewfile's vscode list
+if command -v cursor &> /dev/null && [ -f "$DOTFILES_DIR/Brewfile" ]; then
+    echo "📦 Installing Cursor extensions..."
+    grep '^vscode "' "$DOTFILES_DIR/Brewfile" | sed 's/vscode "\(.*\)"/\1/' | while read -r ext; do
+        echo "  Installing $ext..."
+        cursor --install-extension "$ext" 2>/dev/null || echo "  ⚠️  Failed to install $ext"
+    done
+    echo "✅ Done installing Cursor extensions."
+    echo ""
+fi
+
+# Install Oh My Zsh if not present (before chezmoi so .zshrc can reference it)
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "💻 Installing Oh My Zsh..."
+    RUNZSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    echo "✅ Done installing Oh My Zsh."
+    echo ""
+else
+    echo "✅ Oh My Zsh already installed."
+    echo ""
+fi
+
+# Install Oh My Zsh plugins
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
+if [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]; then
+    echo "📦 Installing zsh-autosuggestions..."
+    git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+    echo "✅ Done installing zsh-autosuggestions."
+    echo ""
+else
+    echo "✅ zsh-autosuggestions already installed."
+    echo ""
+fi
+
+if [ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]; then
+    echo "📦 Installing zsh-syntax-highlighting..."
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+    echo "✅ Done installing zsh-syntax-highlighting."
+    echo ""
+else
+    echo "✅ zsh-syntax-highlighting already installed."
+    echo ""
+fi
+
+# Set up chezmoi with custom source directory
+CHEZMOI_SOURCE="$DOTFILES_DIR"
+
+# Configure chezmoi to use custom source directory
+mkdir -p "$HOME/.config/chezmoi"
+if [ ! -f "$HOME/.config/chezmoi/chezmoi.toml" ]; then
+    echo "⚙️  Configuring chezmoi..."
+    cat > "$HOME/.config/chezmoi/chezmoi.toml" << EOF
+sourceDir = "$CHEZMOI_SOURCE"
+EOF
+    echo "✅ Done configuring chezmoi."
+    echo ""
+fi
+
+# Initialize/apply chezmoi (after Oh My Zsh so .zshrc references work)
+if chezmoi managed 2>/dev/null | grep -q .; then
+    echo "🔄 Applying chezmoi configuration..."
+    chezmoi apply -v
+    echo "✅ Done applying chezmoi configuration."
+else
+    echo "🎯 Initializing chezmoi..."
+    chezmoi init --source="$CHEZMOI_SOURCE" --apply
+    echo "✅ Done initializing chezmoi."
+fi
+echo ""
+
+# Set ZSH as default shell if not already
+if [ "$SHELL" != "$(which zsh)" ]; then
+    echo "🐚 Setting ZSH as default shell..."
+    chsh -s "$(which zsh)"
+    echo "✅ Done. You'll need to log out and back in for this to take effect."
+    echo ""
+fi
+
+# Apply macOS settings if script exists
+if [ -f "$DOTFILES_DIR/scripts/macos-settings.sh" ]; then
+    echo "⚙️  Applying macOS settings..."
+    bash "$DOTFILES_DIR/scripts/macos-settings.sh"
+    echo "✅ Done applying macOS settings."
+    echo ""
+fi
+
+# Configure iTerm to use dotfiles for preferences
+if [ -d "/Applications/iTerm.app" ] || command -v iTerm &> /dev/null; then
+    echo "⚙️  Configuring iTerm preferences..."
+
+    # Set custom preferences folder
+    defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$DOTFILES_DIR/iTerm"
+
+    # Enable loading preferences from custom folder
+    defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+
+    # Enable saving changes to custom folder
+    defaults write com.googlecode.iterm2 SaveChangesToCustomFolder -bool true
+
+    # Auto-save changes to custom folder without prompting
+    defaults write com.googlecode.iterm2 NoSyncNeverRemindPrefsChangesLostForFile_selection -int 2
+
+    echo "✅ iTerm configured to load/save preferences from ~/dotfiles/iTerm/"
+    echo ""
+fi
+
+# Set up dynamic wallpaper
+WALLPAPER="$DOTFILES_DIR/wallpaper/outset_dynamic_wallpaper.heic"
+if [ -f "$WALLPAPER" ]; then
+    echo "🖼️  Setting up dynamic wallpaper..."
+    echo ""
+    echo "📝 To apply the dynamic wallpaper:"
+    echo "   1. System Settings → Wallpaper will open"
+    echo "   2. Click 'Add Folder' or 'Add Photo'"
+    echo "   3. Navigate to: ~/dotfiles/wallpaper/"
+    echo "   4. Select the dynamic wallpaper file"
+    echo ""
+
+    # Open System Settings to Wallpaper pane (macOS 13+)
+    # Falls back to opening System Settings if the URL scheme changes
+    open "x-apple.systempreferences:com.apple.Wallpaper-Settings.extension" 2>/dev/null || \
+        open -a "System Settings" 2>/dev/null || \
+        open -a "System Preferences"
+
+    read -p "Press Enter after you've set the wallpaper..."
+    echo "✅ Wallpaper setup complete."
+    echo ""
+fi
+
+# Set up n for Node version management
+echo "🔧 Setting up n for Node version management..."
+
+# Set n's installation prefix
+export N_PREFIX="$HOME/.n"
+mkdir -p "$N_PREFIX"
+
+# Install n if not already available
+if ! command -v n &> /dev/null; then
+    echo "  Installing n..."
+    npm install -g n 2>/dev/null || echo "  ⚠️  Failed to install n"
+fi
+
+# Install latest LTS via n (this makes n take over from Homebrew node)
+if command -v n &> /dev/null; then
+    n lts
+
+    # Update PATH for this session to use n's node
+    export PATH="$N_PREFIX/bin:$PATH"
+
+    echo "✅ Done setting up n. n is now managing Node versions."
+    echo ""
+else
+    echo "⚠️  n not available. Skipping Node version management setup."
+    echo ""
+fi
+
 # Install global npm packages if file exists
 if [ -f "$DOTFILES_DIR/npm-globals.txt" ]; then
     echo "📦 Installing global npm packages..."
@@ -358,24 +418,16 @@ if [ -f "$DOTFILES_DIR/npm-globals.txt" ]; then
         # Skip empty lines and comments
         [[ -z "$package" || "$package" =~ ^# ]] && continue
 
+        # Skip n (already installed above)
+        [[ "$package" == "n" ]] && continue
+
+        # Skip npm (comes with node)
+        [[ "$package" == "npm" ]] && continue
+
         echo "  Installing $package..."
         npm install -g "$package" 2>/dev/null || echo "  ⚠️  Failed to install $package"
     done < "$DOTFILES_DIR/npm-globals.txt"
     echo "✅ Done installing npm packages."
-    echo ""
-fi
-
-# Set up n for Node version management
-if command -v n &> /dev/null; then
-    echo "🔧 Setting up n for Node version management..."
-
-    # Set n's installation prefix
-    export N_PREFIX="$HOME/.n"
-
-    # Install latest LTS via n (this makes n take over from Homebrew node)
-    n lts
-
-    echo "✅ Done setting up n. n is now managing Node versions."
     echo ""
 fi
 

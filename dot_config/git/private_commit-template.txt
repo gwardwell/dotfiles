@@ -1,0 +1,30 @@
+# |<---------- Maximum 50 characters ----------->|
+# <type>(<scope>): (this commit will...) <subject>
+
+# |<-------------------- Maximum of 72 characters -------------------->|
+# BODY (WHY and HOW)
+
+# FOOTER (RELATED LINKS, JIRA TICKETS, GITHUB ISSUES, ETC.)
+
+# BREAKING CHANGE (IF ANY)
+
+# Examples
+#----------------------------------------------------------------------#
+# TYPE CAN BE                                          VERSION BUMP
+
+# feat        (new feature)                            minor
+# fix         (bug fix)                                patch
+# docs        (documentation)                          patch
+# style       (white-space, formatting, etc)           patch
+# refactor    (non-bug or feature code change)         patch
+# perf        (performance improvements)               patch
+# test        (adding or updating tests)               patch
+# build       (build system or external dependencies)  patch
+# ci          (CI configuration files and scripts)     patch
+# chore       (non-src or test file changes)           patch
+# revert      (reverting a previous commit)            patch
+
+# SCOPE CAN BE ANY LOGICAL GROUPING SUCH AS POC OR PILOT
+
+# FOR MORE INFORMATION
+# https://www.conventionalcommits.org/en/v1.0.0/

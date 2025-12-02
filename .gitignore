@@ -1,0 +1,59 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Thumbnails
+Thumbs.db
+
+# Temporary files
+*.swp
+*.swo
+*~
+.*.tmp
+
+# Editor directories
+.vscode/
+.idea/
+
+# Sensitive data (extra safety)
+*secret*
+*password*
+*credentials*
+*.key
+*.pem
+id_rsa
+id_ed25519
+
+# Backup files
+*.backup
+*.bak
+*.old
+
+# Logs
+*.log
+
+# Chezmoi working files (if any)
+.chezmoi.*.tmp
+
+# Node modules (if you accidentally add any)
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Encrypted files (chezmoi handles these specially)
+# Only ignore if you're NOT using chezmoi encryption
+# encrypted_*
+
+# Local environment files
+.env
+.env.local
+
+# Test/scratch files
+scratch/
+test/
+tmp/

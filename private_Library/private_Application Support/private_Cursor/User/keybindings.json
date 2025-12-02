@@ -1,0 +1,201 @@
+// Place your key bindings in this file to override the defaultsauto[]
+[
+  {
+    "key": "shift+cmd+k",
+    "command": "-editor.action.deleteLines",
+    "when": "textInputFocus && !editorReadonly"
+  },
+  {
+    "key": "cmd+backspace",
+    "command": "-deleteAllLeft",
+    "when": "textInputFocus && !editorReadonly"
+  },
+  {
+    "key": "cmd+backspace",
+    "command": "editor.action.deleteLines"
+  },
+  {
+    "key": "cmd+d",
+    "command": "editor.action.duplicateSelection"
+  },
+  {
+    "key": "shift+cmd+down",
+    "command": "editor.action.moveLinesDownAction",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "alt+down",
+    "command": "-editor.action.moveLinesDownAction",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "shift+cmd+up",
+    "command": "editor.action.moveLinesUpAction",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "alt+up",
+    "command": "-editor.action.moveLinesUpAction",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "cmd+r",
+    "command": "editor.action.startFindReplaceAction",
+    "when": "editorFocus || editorIsOpen"
+  },
+  {
+    "key": "alt+cmd+f",
+    "command": "-editor.action.startFindReplaceAction",
+    "when": "editorFocus || editorIsOpen"
+  },
+  {
+    "key": "cmd+t a",
+    "command": "cursorai.action.generateInTerminal",
+    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported || terminalHasBeenCreated && terminalPromptBarVisible || terminalProcessSupported && terminalPromptBarVisible"
+  },
+  {
+    "key": "cmd+k",
+    "command": "-cursorai.action.generateInTerminal",
+    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported || terminalHasBeenCreated && terminalPromptBarVisible || terminalProcessSupported && terminalPromptBarVisible"
+  },
+  {
+    "key": "cmd+k",
+    "command": "workbench.action.terminal.clear",
+    "when": "terminalFocus && terminalHasBeenCreated && !accessibilityModeEnabled || terminalFocus && terminalProcessSupported && !accessibilityModeEnabled || accessibilityModeEnabled && accessibleViewIsShown && terminalHasBeenCreated && accessibleViewCurrentProviderId == 'terminal' || accessibilityModeEnabled && accessibleViewIsShown && terminalProcessSupported && accessibleViewCurrentProviderId == 'terminal'"
+  },
+  {
+    "key": "cmd+k",
+    "command": "-workbench.action.terminal.clear",
+    "when": "terminalFocus && terminalHasBeenCreated && !accessibilityModeEnabled || terminalFocus && terminalProcessSupported && !accessibilityModeEnabled || accessibilityModeEnabled && accessibleViewIsShown && terminalHasBeenCreated && accessibleViewCurrentProviderId == 'terminal' || accessibilityModeEnabled && accessibleViewIsShown && terminalProcessSupported && accessibleViewCurrentProviderId == 'terminal'"
+  },
+  {
+    "key": "cmd+k cmd+r",
+    "command": "-git.revertSelectedRanges",
+    "when": "isInDiffEditor && !operationInProgress"
+  },
+  {
+    "key": "cmd+g alt+cmd+s",
+    "command": "git.stageSelectedRanges",
+    "when": "isInDiffEditor && !operationInProgress"
+  },
+  {
+    "key": "cmd+k alt+cmd+s",
+    "command": "-git.stageSelectedRanges",
+    "when": "isInDiffEditor && !operationInProgress"
+  },
+  {
+    "key": "cmd+g cmd+n",
+    "command": "git.unstageSelectedRanges",
+    "when": "isInDiffEditor && !operationInProgress"
+  },
+  {
+    "key": "cmd+k cmd+n",
+    "command": "-git.unstageSelectedRanges",
+    "when": "isInDiffEditor && !operationInProgress"
+  },
+  {
+    "key": "cmd+m v",
+    "command": "markdown.showPreviewToSide",
+    "when": "!notebookEditorFocused && editorLangId == 'markdown'"
+  },
+  {
+    "key": "cmd+k v",
+    "command": "-markdown.showPreviewToSide",
+    "when": "!notebookEditorFocused && editorLangId == 'markdown'"
+  },
+  {
+    "key": "cmd+k v",
+    "command": "-preview-vscode.showPreviewToSide",
+    "when": "editorTextFocus && !notebookEditorFocused && editorLangId != 'markdown' || explorerViewletVisible && filesExplorerFocus && !notebookEditorFocused && editorLangId != 'markdown'"
+  },
+  {
+    "key": "cmd+q x",
+    "command": "quokka.copyValue",
+    "when": "quokka.hasActiveSession && quokka.isActiveEditorRunningQuokka && !quokka.isLiveShareClient && !terminalFocus"
+  },
+  {
+    "key": "cmd+k x",
+    "command": "-quokka.copyValue",
+    "when": "quokka.hasActiveSession && quokka.isActiveEditorRunningQuokka && !quokka.isLiveShareClient && !terminalFocus"
+  },
+  {
+    "key": "cmd+q i",
+    "command": "quokka.installMissingPackageToQuokka",
+    "when": "quokka.hasActiveSession && !quokka.isLiveShareClient && !terminalFocus"
+  },
+  {
+    "key": "cmd+k i",
+    "command": "-quokka.installMissingPackageToQuokka",
+    "when": "quokka.hasActiveSession && !quokka.isLiveShareClient && !terminalFocus"
+  },
+  {
+    "key": "cmd+q l",
+    "command": "quokka.createFile",
+    "when": "!quokka.isLiveShareClient && !terminalFocus"
+  },
+  {
+    "key": "cmd+k l",
+    "command": "-quokka.createFile",
+    "when": "!quokka.isLiveShareClient && !terminalFocus"
+  },
+  {
+    "key": "cmd+q j",
+    "command": "quokka.createJavaScriptFile",
+    "when": "!quokka.isLiveShareClient && !terminalFocus"
+  },
+  {
+    "key": "cmd+k j",
+    "command": "-quokka.createJavaScriptFile",
+    "when": "!quokka.isLiveShareClient && !terminalFocus"
+  },
+  {
+    "key": "cmd+q t",
+    "command": "quokka.createTypeScriptFile",
+    "when": "!quokka.isLiveShareClient && !terminalFocus"
+  },
+  {
+    "key": "cmd+k t",
+    "command": "-quokka.createTypeScriptFile",
+    "when": "!quokka.isLiveShareClient && !terminalFocus"
+  },
+  {
+    "key": "cmd+q v",
+    "command": "quokka.showValue",
+    "when": "quokka.hasActiveSession && quokka.isActiveEditorRunningQuokka && !quokka.isLiveShareClient && !terminalFocus"
+  },
+  {
+    "key": "cmd+k v",
+    "command": "-quokka.showValue",
+    "when": "quokka.hasActiveSession && quokka.isActiveEditorRunningQuokka && !quokka.isLiveShareClient && !terminalFocus"
+  },
+  {
+    "key": "cmd+q q",
+    "command": "quokka.makeQuokkaFromExistingFile",
+    "when": "!quokka.isLiveShareClient && !terminalFocus"
+  },
+  {
+    "key": "cmd+k q",
+    "command": "-quokka.makeQuokkaFromExistingFile",
+    "when": "!quokka.isLiveShareClient && !terminalFocus"
+  },
+  {
+    "key": "cmd+q s",
+    "command": "quokka.stopCurrent",
+    "when": "quokka.hasActiveSession && !quokka.isLiveShareClient && !terminalFocus"
+  },
+  {
+    "key": "cmd+k s",
+    "command": "-quokka.stopCurrent",
+    "when": "quokka.hasActiveSession && !quokka.isLiveShareClient && !terminalFocus"
+  },
+  {
+    "key": "cmd+k",
+    "command": "-editor.action.inlineDiffs.focusEditor",
+    "when": "editorHasPromptBar && editorPromptBarFocused"
+  },
+  {
+    "key": "cmd+k",
+    "command": "-aipopup.action.modal.generate",
+    "when": "editorFocus && !composerBarIsVisible"
+}
+]

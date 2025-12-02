@@ -1,0 +1,30 @@
+# Documentation
+README
+CONTRIBUTING
+
+# Installation and export scripts
+install.sh
+scripts/
+
+# Package management files (handled by install.sh)
+Brewfile
+npm-globals.txt
+
+# Git repository files
+.git/
+.gitignore
+.gitattributes
+
+# Application-specific configs that need manual import
+chrome/
+jetbrains/
+iTerm/
+
+# Employer-specific config (template only, customize per machine)
+.oh-my-zsh/custom/aliases-employer.zsh
+
+# Manually managed files
+wallpaper/
+
+# macOS files
+.DS_Store

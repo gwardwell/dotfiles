@@ -6,13 +6,34 @@ Files are _largely_ managed using chezmoi.
 
 ### File Naming Conventions
 
-chezmoi uses special prefixes in the source directory:
+chezmoi uses special prefixes and suffixes in the source directory:
 
-| Prefix     | Meaning               | Example                  |
-| ---------- | --------------------- | ------------------------ |
-| `dot_`     | Becomes `.`           | `dot_zshrc` → `~/.zshrc` |
-| `private_` | File permissions 0600 | `private_Library/`       |
-| `empty_`   | Creates empty file    | `empty_file`             |
+| Prefix/Suffix | Meaning               | Example                               |
+| ------------- | --------------------- | ------------------------------------- |
+| `dot_`        | Becomes `.`           | `dot_zshrc` → `~/.zshrc`              |
+| `private_`    | File permissions 0600 | `private_Library/`                    |
+| `empty_`      | Creates empty file    | `empty_file`                          |
+| `.tmpl`       | Template file         | `dot_gitconfig.tmpl` → `~/.gitconfig` |
+
+### Templates
+
+Files ending in `.tmpl` are processed as [Go templates](https://pkg.go.dev/text/template). Template data is stored in `~/.config/chezmoi/chezmoi.toml`:
+
+```toml
+sourceDir = "/Users/yourusername/dotfiles"
+
+[data]
+signingkey = "ssh-ed25519 AAAA..."
+gpgsign = true
+```
+
+In template files, use `{{ .variablename }}` to insert values:
+
+```
+{{- if .signingkey }}
+signingkey = {{ .signingkey }}
+{{- end }}
+```
 
 ### Adding and Removing Files
 

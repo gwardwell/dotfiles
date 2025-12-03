@@ -382,22 +382,37 @@ CHEZMOI_SOURCE="$DOTFILES_DIR"
 # Configure chezmoi to use custom source directory
 mkdir -p "$HOME/.config/chezmoi"
 
-# Build chezmoi config with signing data if it was set earlier
+# Read existing signing config BEFORE overwriting the file
+CHEZMOI_CONFIG="$HOME/.config/chezmoi/chezmoi.toml"
+if [[ -z "$SIGNING_KEY_SET" ]] && [ -f "$CHEZMOI_CONFIG" ]; then
+    existing_key=$(grep "^signingkey" "$CHEZMOI_CONFIG" 2>/dev/null | cut -d'"' -f2 || echo "")
+    existing_sign=$(grep "^gpgsign" "$CHEZMOI_CONFIG" 2>/dev/null | awk '{print $3}' || echo "false")
+fi
+
+# Build chezmoi config with signing data
 echo "⚙️  Configuring chezmoi..."
-cat > "$HOME/.config/chezmoi/chezmoi.toml" << EOF
+cat > "$CHEZMOI_CONFIG" << EOF
 sourceDir = "$CHEZMOI_SOURCE"
 
 [data]
 EOF
 
-# Add signing config if set during SSH setup
+# Add signing config
 if [[ -n "$SIGNING_KEY_SET" ]]; then
-    cat >> "$HOME/.config/chezmoi/chezmoi.toml" << EOF
+    # New signing setup this run
+    cat >> "$CHEZMOI_CONFIG" << EOF
 signingkey = "$SIGNING_KEY_SET"
 gpgsign = true
 EOF
+elif [[ -n "$existing_key" ]]; then
+    # Preserve existing signing config from previous run
+    cat >> "$CHEZMOI_CONFIG" << EOF
+signingkey = "${existing_key}"
+gpgsign = ${existing_sign:-false}
+EOF
 else
-    cat >> "$HOME/.config/chezmoi/chezmoi.toml" << EOF
+    # Fresh install, no signing
+    cat >> "$CHEZMOI_CONFIG" << EOF
 signingkey = ""
 gpgsign = false
 EOF

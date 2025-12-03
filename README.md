@@ -136,14 +136,36 @@ your.name@employer.com ssh-ed25519 AAAA...your-key
 
 If you skipped signing during install, enable it later:
 
-```bash
-# Get your public key from 1Password, then:
-git config --global user.signingkey "ssh-ed25519 AAAA...your-key"
-git config --global commit.gpgsign true
+**1. Get your public key from 1Password**
 
-# Add to allowed_signers
+**2. Edit chezmoi config:**
+
+```bash
+# Open the chezmoi config file
+${EDITOR:-vim} ~/.config/chezmoi/chezmoi.toml
+```
+
+Update the `[data]` section:
+
+```toml
+[data]
+signingkey = "ssh-ed25519 AAAA...your-key"
+gpgsign = true
+```
+
+**3. Apply the changes:**
+
+```bash
+chezmoi apply
+```
+
+**4. Add to allowed_signers:**
+
+```bash
 echo "your@email.com ssh-ed25519 AAAA...your-key" >> ~/.ssh/allowed_signers
 ```
+
+> **Note:** Since `~/.gitconfig` is managed by chezmoi, edit the chezmoi config rather than using `git config --global`.
 
 ## Manual Configuration Steps
 

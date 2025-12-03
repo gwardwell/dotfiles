@@ -280,8 +280,10 @@ if [[ "$ssh_choice" == "1" ]]; then
             # Get email from gitconfig
             git_email=$(git config --global user.email)
 
-            # Update allowed_signers file
-            echo "$git_email $signing_key" >> "$HOME/.ssh/allowed_signers"
+            # Update allowed_signers file (only if not already present)
+            if ! grep -q "$git_email" "$HOME/.ssh/allowed_signers" 2>/dev/null; then
+                echo "$git_email $signing_key" >> "$HOME/.ssh/allowed_signers"
+            fi
 
             # Enable signing in gitconfig
             git config --global user.signingkey "$signing_key"

@@ -94,7 +94,7 @@ case $ssh_choice in
 
         # Create SSH config for 1Password
         if ! grep -q "1Password" "$HOME/.ssh/config" 2>/dev/null; then
-            cat "$DOTFILES_DIR/templates/ssh-config-1password" >> "$HOME/.ssh/config"
+            cat "$DOTFILES_DIR/templates/ssh-config-1pw" >> "$HOME/.ssh/config"
             chmod 600 "$HOME/.ssh/config"
         fi
 

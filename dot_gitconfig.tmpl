@@ -6,13 +6,15 @@
 [user]
 	name = Greg Wardwell
 	email = gwardwell@users.noreply.github.com
-	# SSH signing key (copy from 1Password → SSH Key → public key)
-	# signingkey = ssh-ed25519 AAAA...
+{{- if .signingkey }}
+	signingkey = {{ .signingkey }}
+{{- end }}
 
 [commit]
 	template = ~/.config/git/commit-template.txt
-	# Uncomment to enable commit signing (requires signingkey above)
-	# gpgsign = true
+{{- if .gpgsign }}
+	gpgsign = true
+{{- end }}
 
 [gpg]
 	# Use SSH keys for signing (not GPG)
@@ -34,3 +36,4 @@
 # Repos in ~/Developer/employer/ will use ~/.gitconfig-employer settings
 [includeIf "gitdir:~/Developer/employer/"]
 	path = ~/.gitconfig-employer
+

@@ -277,20 +277,20 @@ if [[ "$ssh_choice" == "1" ]]; then
         read -p "Paste your SSH public key: " signing_key
 
         if [[ -n "$signing_key" ]]; then
-            # Get email from gitconfig
-            git_email=$(git config --global user.email)
+            # Get email from gitconfig (chezmoi will have set this)
+            git_email="gwardwell@users.noreply.github.com"
 
             # Update allowed_signers file (only if not already present)
+            mkdir -p "$HOME/.ssh"
             if ! grep -q "$git_email" "$HOME/.ssh/allowed_signers" 2>/dev/null; then
                 echo "$git_email $signing_key" >> "$HOME/.ssh/allowed_signers"
             fi
 
-            # Enable signing in gitconfig
-            git config --global user.signingkey "$signing_key"
-            git config --global commit.gpgsign true
+            # Store signing config for chezmoi template
+            SIGNING_KEY_SET="$signing_key"
 
             echo ""
-            echo "✅ Commit signing enabled for $git_email"
+            echo "✅ Commit signing will be enabled for $git_email"
             echo ""
             echo "   Step 2: Add signing key to GitHub"
             echo "   ──────────────────────────────────"
@@ -381,14 +381,29 @@ CHEZMOI_SOURCE="$DOTFILES_DIR"
 
 # Configure chezmoi to use custom source directory
 mkdir -p "$HOME/.config/chezmoi"
-if [ ! -f "$HOME/.config/chezmoi/chezmoi.toml" ]; then
-    echo "⚙️  Configuring chezmoi..."
-    cat > "$HOME/.config/chezmoi/chezmoi.toml" << EOF
+
+# Build chezmoi config with signing data if it was set earlier
+echo "⚙️  Configuring chezmoi..."
+cat > "$HOME/.config/chezmoi/chezmoi.toml" << EOF
 sourceDir = "$CHEZMOI_SOURCE"
+
+[data]
 EOF
-    echo "✅ Done configuring chezmoi."
-    echo ""
+
+# Add signing config if set during SSH setup
+if [[ -n "$SIGNING_KEY_SET" ]]; then
+    cat >> "$HOME/.config/chezmoi/chezmoi.toml" << EOF
+signingkey = "$SIGNING_KEY_SET"
+gpgsign = true
+EOF
+else
+    cat >> "$HOME/.config/chezmoi/chezmoi.toml" << EOF
+signingkey = ""
+gpgsign = false
+EOF
 fi
+echo "✅ Done configuring chezmoi."
+echo ""
 
 # Initialize/apply chezmoi (after Oh My Zsh so .zshrc references work)
 if chezmoi managed 2>/dev/null | grep -q .; then
@@ -491,19 +506,23 @@ fi
 # Install global npm packages if file exists
 if [ -f "$DOTFILES_DIR/npm-globals.txt" ]; then
     echo "📦 Installing global npm packages..."
+
+    # Build list of packages, excluding n and npm
+    packages=()
     while read -r package; do
         # Skip empty lines and comments
         [[ -z "$package" || "$package" =~ ^# ]] && continue
-
-        # Skip n (already installed above)
-        [[ "$package" == "n" ]] && continue
-
-        # Skip npm (comes with node)
-        [[ "$package" == "npm" ]] && continue
-
-        echo "  Installing $package..."
-        npm install -g "$package" 2>/dev/null || echo "  ⚠️  Failed to install $package"
+        # Skip n (already installed above) and npm (comes with node)
+        [[ "$package" == "n" || "$package" == "npm" ]] && continue
+        packages+=("$package")
     done < "$DOTFILES_DIR/npm-globals.txt"
+
+    # Install all packages in one command
+    if [ ${#packages[@]} -gt 0 ]; then
+        echo "  Installing: ${packages[*]}"
+        npm install -g "${packages[@]}" || echo "  ⚠️  Some packages may have failed"
+    fi
+
     echo "✅ Done installing npm packages."
     echo ""
 fi

@@ -254,6 +254,81 @@ if [[ "$ssh_choice" == "1" || "$ssh_choice" == "2" ]]; then
     echo ""
 fi
 
+# Set up commit signing (optional, requires SSH key)
+if [[ "$ssh_choice" == "1" ]]; then
+    echo "✍️  Set up commit signing?"
+    echo "   This adds a 'Verified' badge to your commits on GitHub."
+    echo ""
+    echo "   1) Yes - Enable commit signing"
+    echo "   2) No - Skip for now"
+    echo ""
+    read -p "Enter choice [1/2]: " signing_choice
+
+    if [[ "$signing_choice" == "1" ]]; then
+        echo ""
+        echo "📝 Setting up commit signing with 1Password..."
+        echo ""
+        echo "   Step 1: Get your SSH public key"
+        echo "   ─────────────────────────────────"
+        echo "   1. Open 1Password"
+        echo "   2. Find your SSH Key item"
+        echo "   3. Copy the 'public key' field"
+        echo ""
+        read -p "Paste your SSH public key: " signing_key
+
+        if [[ -n "$signing_key" ]]; then
+            # Get email from gitconfig
+            git_email=$(git config --global user.email)
+
+            # Update allowed_signers file
+            echo "$git_email $signing_key" >> "$HOME/.ssh/allowed_signers"
+
+            # Enable signing in gitconfig
+            git config --global user.signingkey "$signing_key"
+            git config --global commit.gpgsign true
+
+            echo ""
+            echo "✅ Commit signing enabled for $git_email"
+            echo ""
+            echo "   Step 2: Add signing key to GitHub"
+            echo "   ──────────────────────────────────"
+            echo "   1. Go to: https://github.com/settings/keys"
+            echo "   2. Click 'New SSH Key'"
+            echo "   3. Select 'Signing Key' as the key type"
+            echo "   4. Paste your public key"
+            echo ""
+
+            open "https://github.com/settings/ssh/new" 2>/dev/null || true
+
+            read -p "Press Enter after you've added the signing key to GitHub..."
+            echo ""
+            echo "✅ Commit signing setup complete!"
+            echo ""
+            echo "   ┌─────────────────────────────────────────────────────┐"
+            echo "   │  📋 MANUAL STEPS FOR MULTIPLE ACCOUNTS              │"
+            echo "   ├─────────────────────────────────────────────────────┤"
+            echo "   │  If you use a work email for employer repos:        │"
+            echo "   │                                                     │"
+            echo "   │  1. Edit ~/.ssh/allowed_signers                     │"
+            echo "   │     Add: work@employer.com ssh-ed25519 AAAA...      │"
+            echo "   │                                                     │"
+            echo "   │  2. Edit ~/.gitconfig-employer                      │"
+            echo "   │     Set your work email and signing key             │"
+            echo "   │                                                     │"
+            echo "   │  See README.md for details.                         │"
+            echo "   └─────────────────────────────────────────────────────┘"
+            echo ""
+        else
+            echo "⚠️  No key provided. Skipping signing setup."
+        fi
+        echo ""
+    else
+        echo "⏭️  Skipping commit signing."
+        echo "   You can enable it later - see README.md for instructions."
+        echo ""
+    fi
+fi
+
 # Install Cursor extensions from Brewfile's vscode list
 if command -v cursor &> /dev/null && [ -f "$DOTFILES_DIR/Brewfile" ]; then
     echo "📦 Installing Cursor extensions..."
@@ -433,6 +508,7 @@ fi
 
 # Create common directories
 mkdir -p "$HOME/Developer/personal"
+mkdir -p "$HOME/Developer/employer"
 mkdir -p "$HOME/Sites"
 
 echo ""
@@ -441,5 +517,14 @@ echo ""
 echo "📝 Next steps:"
 echo "  1. Restart your terminal or run: source ~/.zshrc"
 echo "  2. Some macOS settings require a logout/restart to take effect"
-echo "  3. Check Chrome Apps documentation to recreate web app shortcuts"
+echo ""
+echo "📋 Manual configuration (if using multiple GitHub accounts):"
+echo "  • Copy and edit employer config:"
+echo "      cp ~/dotfiles/dot_gitconfig-employer ~/.gitconfig-employer"
+echo "      cp ~/dotfiles/dot_oh-my-zsh/custom/aliases-employer.zsh ~/.oh-my-zsh/custom/"
+echo ""
+echo "  • If using commit signing, add employer email to:"
+echo "      ~/.ssh/allowed_signers"
+echo ""
+echo "  See README.md for full details."
 echo ""

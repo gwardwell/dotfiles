@@ -22,6 +22,7 @@ iTerm/
 
 # Employer-specific config (template only, customize per machine)
 .oh-my-zsh/custom/aliases-employer.zsh
+.gitconfig-employer
 
 # Manually managed files
 wallpaper/

@@ -87,6 +87,64 @@ Host employer
 
 There are zsh aliases in `aliases-employer.zsh` to handle flipping between these hosts.
 
+## Commit Signing (Optional)
+
+If you chose 1Password SSH, you'll be asked about commit signing:
+
+```
+✍️  Set up commit signing?
+   This adds a 'Verified' badge to your commits on GitHub.
+
+   1) Yes - Enable commit signing
+   2) No - Skip for now
+```
+
+### What Commit Signing Does
+
+- Adds a ✅ **Verified** badge to your commits on GitHub
+- Cryptographically proves commits came from you
+- Uses Touch ID via 1Password (no separate GPG key needed)
+
+### Setup Steps
+
+1. **During install:** Paste your SSH public key when prompted
+2. **Add to GitHub:** Add the same key as a **Signing Key** (not just Authentication)
+   - Go to https://github.com/settings/keys
+   - Click "New SSH Key"
+   - Select **"Signing Key"** as the key type
+
+### Files That Need Manual Updates
+
+After installation, update these files for commit signing:
+
+| File                     | Purpose                     | Action Needed               |
+| ------------------------ | --------------------------- | --------------------------- |
+| `~/.ssh/allowed_signers` | Verifies signatures locally | Add your email + public key |
+| `~/.gitconfig`           | Already configured          | Key added during install    |
+
+**For multiple accounts**, add each email to `~/.ssh/allowed_signers`:
+
+```
+# Personal
+gwardwell@users.noreply.github.com ssh-ed25519 AAAA...your-key
+
+# Employer (same key or different key)
+your.name@employer.com ssh-ed25519 AAAA...your-key
+```
+
+### Skipping or Enabling Later
+
+If you skipped signing during install, enable it later:
+
+```bash
+# Get your public key from 1Password, then:
+git config --global user.signingkey "ssh-ed25519 AAAA...your-key"
+git config --global commit.gpgsign true
+
+# Add to allowed_signers
+echo "your@email.com ssh-ed25519 AAAA...your-key" >> ~/.ssh/allowed_signers
+```
+
 ## Manual Configuration Steps
 
 Some applications require manual configuration after installation:
@@ -103,15 +161,34 @@ If you can't use JetBrains Settings Sync, manually import settings:
    - `RustRover-settings.zip` for RustRover
 5. Click **OK** and restart the IDE
 
-### Employer-Specific Aliases
+### Employer-Specific Configuration
 
-Copy and customize the employer aliases template:
+Two files need to be copied and customized for employer-specific settings:
 
-1. Copy the template:
-   ```bash
-   cp ~/dotfiles/dot_oh-my-zsh/custom/aliases-employer.zsh ~/.oh-my-zsh/custom/
-   ```
-2. Edit `~/.oh-my-zsh/custom/aliases-employer.zsh` with your employer-specific aliases
+#### 1. Git Config (email, signing)
+
+```bash
+cp ~/dotfiles/dot_gitconfig-employer ~/.gitconfig-employer
+```
+
+Edit `~/.gitconfig-employer`:
+
+- Set your work email address
+- Optionally set a different signing key
+
+Repos in `~/Developer/employer/` will automatically use these settings.
+
+#### 2. Shell Aliases
+
+```bash
+cp ~/dotfiles/dot_oh-my-zsh/custom/aliases-employer.zsh ~/.oh-my-zsh/custom/
+```
+
+Edit `~/.oh-my-zsh/custom/aliases-employer.zsh`:
+
+- Set employer GitHub org
+- Configure CI/CD shortcuts
+- Add employer-specific aliases
 
 ### Google Chrome
 

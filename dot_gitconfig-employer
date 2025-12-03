@@ -1,0 +1,29 @@
+# Employer-specific Git configuration
+#
+# This file overrides settings from ~/.gitconfig for repos in ~/Developer/employer/
+# Update these values when starting at a new employer.
+#
+# To use:
+# 1. Copy this template: cp ~/dotfiles/dot_gitconfig-employer ~/.gitconfig-employer
+# 2. Update the values below
+# 3. Clone employer repos to ~/Developer/employer/
+
+[user]
+	# Your work email address
+	email = your.name@employer.com
+
+	# SSH signing key for work (if different from personal)
+	# Copy from 1Password → SSH Key → public key
+	# signingkey = ssh-ed25519 AAAA...
+
+# Signing is inherited from ~/.gitconfig
+# Only uncomment these if you need DIFFERENT signing settings for work
+# (e.g., different key, or disable signing for work repos)
+
+# [commit]
+# 	gpgsign = true   # or false to disable for work
+
+# If using a different signing key, you may need to override:
+# [gpg "ssh"]
+# 	allowedSignersFile = ~/.ssh/allowed_signers_employer
+

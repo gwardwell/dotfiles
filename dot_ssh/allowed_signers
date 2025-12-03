@@ -1,0 +1,35 @@
+# SSH Allowed Signers
+#
+# This file lists trusted signing keys for git signature verification.
+# Git uses this to verify signatures when running: git log --show-signature
+#
+# Format: email ssh-key-type public-key
+#
+# ============================================
+# SETUP
+# ============================================
+#
+# To get your public key from 1Password:
+# 1. Open 1Password
+# 2. Find your SSH Key item
+# 3. Copy the "public key" field
+#
+# ============================================
+# MULTIPLE ACCOUNTS
+# ============================================
+#
+# Add an entry for EACH email you sign commits with.
+# If using the same key for multiple accounts, list it multiple times:
+#
+# Example (same key, multiple emails):
+#   gwardwell@users.noreply.github.com ssh-ed25519 AAAA...same-key
+#   your.name@employer.com ssh-ed25519 AAAA...same-key
+#
+# Example (different keys per account):
+#   gwardwell@users.noreply.github.com ssh-ed25519 AAAA...personal-key
+#   your.name@employer.com ssh-ed25519 AAAA...employer-key
+#
+# ============================================
+# YOUR KEYS (add below)
+# ============================================
+

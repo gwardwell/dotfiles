@@ -6,8 +6,22 @@
 [user]
 	name = Greg Wardwell
 	email = gwardwell@users.noreply.github.com
+	# SSH signing key (copy from 1Password → SSH Key → public key)
+	# signingkey = ssh-ed25519 AAAA...
+
 [commit]
 	template = ~/.config/git/commit-template.txt
+	# Uncomment to enable commit signing (requires signingkey above)
+	# gpgsign = true
+
+[gpg]
+	# Use SSH keys for signing (not GPG)
+	format = ssh
+
+[gpg "ssh"]
+	# 1Password handles SSH signing with Touch ID
+	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+	allowedSignersFile = ~/.ssh/allowed_signers
 [core]
 	# Editor for git commit messages (change to "code -w" for VS Code)
 	editor = cursor -w
@@ -15,3 +29,8 @@
 [init]
 	# Template directory - .gitignore copied to every new repo
 	templateDir = ~/.git-templates
+
+# Conditional config for employer repos
+# Repos in ~/Developer/employer/ will use ~/.gitconfig-employer settings
+[includeIf "gitdir:~/Developer/employer/"]
+	path = ~/.gitconfig-employer

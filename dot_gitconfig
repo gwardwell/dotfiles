@@ -12,3 +12,6 @@
 	# Editor for git commit messages (change to "code -w" for VS Code)
 	editor = cursor -w
 	excludesfile = ~/.gitignore_global
+[init]
+	# Template directory - .gitignore copied to every new repo
+	templateDir = ~/.git-templates

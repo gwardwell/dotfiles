@@ -1,0 +1,57 @@
+# =========================
+# OS Generated Files
+# =========================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# =========================
+# Editor/IDE Files
+# =========================
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# =========================
+# Logs
+# =========================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================
+# Environment Files
+# =========================
+.env
+.env.local
+.env.*.local
+
+# =========================
+# Dependencies (uncomment as needed)
+# =========================
+# node_modules/
+# vendor/
+# .bundle/
+
+# =========================
+# Build Output (uncomment as needed)
+# =========================
+# dist/
+# build/
+# out/
+# *.o
+# *.pyc
+

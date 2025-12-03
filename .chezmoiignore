@@ -26,5 +26,8 @@ iTerm/
 # Manually managed files
 wallpaper/
 
+# docs
+docs/
+
 # macOS files
 .DS_Store

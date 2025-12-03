@@ -233,14 +233,13 @@ git push
 
 To add a new macOS setting to the automated setup:
 
-1. Find the `defaults` command for the setting:
+1. Find the `defaults` command for the setting using the interactive helper:
 
 ```
-defaults read > before.txt
-# Change the setting in System Settings
-defaults read > after.txt
-diff before.txt after.txt
+% ~/dotfiles/scripts/find-macos-defaults.sh
 ```
+
+This script captures a before/after snapshot of your defaults and shows you what changed.
 
 2. Add the `defaults write` command to `~/dotfiles/scripts/macos-settings.sh`
 3. Commit and push the changes:

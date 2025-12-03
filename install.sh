@@ -94,12 +94,7 @@ case $ssh_choice in
 
         # Create SSH config for 1Password
         if ! grep -q "1Password" "$HOME/.ssh/config" 2>/dev/null; then
-            cat >> "$HOME/.ssh/config" << 'EOF'
-
-# 1Password SSH Agent
-Host *
-    IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-EOF
+            cat "$DOTFILES_DIR/templates/ssh-config-1password" >> "$HOME/.ssh/config"
             chmod 600 "$HOME/.ssh/config"
         fi
 
@@ -209,13 +204,7 @@ EOF
             mkdir -p "$HOME/.ssh"
             chmod 700 "$HOME/.ssh"
             if ! grep -q "UseKeychain yes" "$HOME/.ssh/config" 2>/dev/null; then
-                cat >> "$HOME/.ssh/config" << EOF
-
-Host github.com
-    AddKeysToAgent yes
-    UseKeychain yes
-    IdentityFile ~/.ssh/id_ed25519
-EOF
+                cat "$DOTFILES_DIR/templates/ssh-config-traditional" >> "$HOME/.ssh/config"
                 chmod 600 "$HOME/.ssh/config"
             fi
 
@@ -280,8 +269,13 @@ if [[ "$ssh_choice" == "1" ]]; then
             # Get email from gitconfig (chezmoi will have set this)
             git_email="gwardwell@users.noreply.github.com"
 
-            # Update allowed_signers file (only if not already present)
+            # Create allowed_signers file from template if it doesn't exist
             mkdir -p "$HOME/.ssh"
+            if [ ! -f "$HOME/.ssh/allowed_signers" ]; then
+                cp "$DOTFILES_DIR/templates/allowed_signers" "$HOME/.ssh/allowed_signers"
+            fi
+
+            # Add key if not already present
             if ! grep -q "$git_email" "$HOME/.ssh/allowed_signers" 2>/dev/null; then
                 echo "$git_email $signing_key" >> "$HOME/.ssh/allowed_signers"
             fi

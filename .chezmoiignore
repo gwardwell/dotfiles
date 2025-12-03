@@ -24,6 +24,9 @@ iTerm/
 .oh-my-zsh/custom/aliases-employer.zsh
 .gitconfig-employer
 
+# Templates - copied by install.sh, not managed by chezmoi
+templates/
+
 # Manually managed files
 wallpaper/
 

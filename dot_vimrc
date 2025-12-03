@@ -1,0 +1,61 @@
+" Sensible Vim defaults for quick terminal editing
+" (Primary editor is Cursor/VS Code - this is just for fallback)
+
+" ============================================
+" Display
+" ============================================
+set number                  " Show line numbers
+set relativenumber          " Relative line numbers for easy jumping
+set ruler                   " Show cursor position
+set showcmd                 " Show incomplete commands
+set showmode                " Show current mode
+set cursorline              " Highlight current line
+syntax on                   " Enable syntax highlighting
+set background=dark         " Assume dark background
+
+" ============================================
+" Indentation
+" ============================================
+set tabstop=2               " Tab = 2 spaces
+set shiftwidth=2            " Indent = 2 spaces
+set softtabstop=2           " Backspace through spaces like tabs
+set expandtab               " Use spaces, not tabs
+set autoindent              " Copy indent from current line
+set smartindent             " Smart autoindenting on new lines
+
+" ============================================
+" Search
+" ============================================
+set hlsearch                " Highlight search results
+set incsearch               " Incremental search (search as you type)
+set ignorecase              " Case-insensitive search...
+set smartcase               " ...unless search contains uppercase
+
+" ============================================
+" Behavior
+" ============================================
+set backspace=indent,eol,start  " Backspace works as expected
+set mouse=a                 " Enable mouse support
+set clipboard=unnamed       " Use system clipboard
+set wildmenu                " Visual autocomplete for command menu
+set lazyredraw              " Don't redraw during macros
+set scrolloff=5             " Keep 5 lines above/below cursor
+set encoding=utf-8          " UTF-8 encoding
+set noswapfile              " Don't create swap files
+set nobackup                " Don't create backup files
+
+" ============================================
+" Key mappings
+" ============================================
+" Use jk to exit insert mode (faster than reaching for Esc)
+inoremap jk <Esc>
+
+" Clear search highlighting with Escape
+nnoremap <Esc> :nohlsearch<CR><Esc>
+
+" Quick save
+nnoremap <leader>w :w<CR>
+
+" Quick quit
+nnoremap <leader>q :q<CR>
+

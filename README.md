@@ -171,6 +171,18 @@ echo "your@email.com ssh-ed25519 AAAA...your-key" >> ~/.ssh/allowed_signers
 
 Some applications require manual configuration after installation:
 
+### Apps Requiring Sign-in
+
+The following apps need to be signed into after installation:
+
+- **1Password** - Sign in to sync passwords
+- **GitHub Desktop** - Sign in with GitHub account
+- **Docker Desktop** - Sign in (optional, for Docker Hub)
+- **Zoom** - Sign in with account
+- **Claude** - Sign in with Anthropic account
+- **Postman** - Sign in to sync collections (optional)
+- **Raycast** - Sign in to sync settings, snippets, and extensions
+
 ### JetBrains IDEs (IntelliJ, RustRover)
 
 If you can't use JetBrains Settings Sync, manually import settings:
@@ -183,35 +195,6 @@ If you can't use JetBrains Settings Sync, manually import settings:
    - `RustRover-settings.zip` for RustRover
 5. Click **OK** and restart the IDE
 
-### Employer-Specific Configuration
-
-Two files need to be copied and customized for employer-specific settings:
-
-#### 1. Git Config (email, signing)
-
-```bash
-cp ~/dotfiles/dot_gitconfig-employer ~/.gitconfig-employer
-```
-
-Edit `~/.gitconfig-employer`:
-
-- Set your work email address
-- Optionally set a different signing key
-
-Repos in `~/Developer/employer/` will automatically use these settings.
-
-#### 2. Shell Aliases
-
-```bash
-cp ~/dotfiles/dot_oh-my-zsh/custom/aliases-employer.zsh ~/.oh-my-zsh/custom/
-```
-
-Edit `~/.oh-my-zsh/custom/aliases-employer.zsh`:
-
-- Set employer GitHub org
-- Configure CI/CD shortcuts
-- Add employer-specific aliases
-
 ### Google Chrome
 
 Import bookmarks:
@@ -221,18 +204,6 @@ Import bookmarks:
 3. Click **⋮** (top right of Bookmark Manager)
 4. Select **Import bookmarks**
 5. Navigate to `~/dotfiles/chrome/bookmarks.html`
-
-### Apps Requiring Sign-in
-
-The following apps need to be signed into after installation:
-
-- **1Password** - Sign in to sync passwords
-- **GitHub Desktop** - Sign in with GitHub account
-- **Docker Desktop** - Sign in (optional, for Docker Hub)
-- **Zoom** - Sign in with account
-- **Claude** - Sign in with Anthropic account
-- **Postman** - Sign in to sync collections (optional)
-- **Raycast** - Sign in to sync settings, snippets, and extensions
 
 ### Raycast
 
@@ -302,3 +273,32 @@ Pair your Bluetooth devices (keyboard, mouse, headphones) via:
 
 1. Open **System Settings → Printers & Scanners**
 2. Add your printers
+
+### Employer-Specific Configuration
+
+Two files need to be copied and customized for employer-specific settings:
+
+#### 1. Git Config (email, signing)
+
+```bash
+cp ~/dotfiles/dot_gitconfig-employer ~/.gitconfig-employer
+```
+
+Edit `~/.gitconfig-employer`:
+
+- Set your work email address
+- Optionally set a different signing key
+
+Repos in `~/Developer/employer/` will automatically use these settings.
+
+#### 2. Shell Aliases
+
+```bash
+cp ~/dotfiles/dot_oh-my-zsh/custom/aliases-employer.zsh ~/.oh-my-zsh/custom/
+```
+
+Edit `~/.oh-my-zsh/custom/aliases-employer.zsh`:
+
+- Set employer GitHub org
+- Configure CI/CD shortcuts
+- Add employer-specific aliases

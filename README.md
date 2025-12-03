@@ -234,6 +234,27 @@ The following apps need to be signed into after installation:
 - **Postman** - Sign in to sync collections (optional)
 - **Raycast** - Sign in to sync settings, snippets, and extensions
 
+### Raycast
+
+To use Raycast as your primary launcher with `Ctrl+Space` (or the default `Cmd+Space`):
+
+1. Disable Spotlight shortcut:
+   - Open **System Settings → Keyboard → Keyboard Shortcuts → Spotlight**
+   - Uncheck "Show Spotlight search"
+2. Open Raycast → Settings → General
+3. Set **Ctrl+Space** as the Raycast Hotkey (or use the default **Cmd+Space**)
+4. Sign in to enable Cloud Sync
+
+### GitHub CLI
+
+Authenticate the GitHub CLI to use features like `gh pr create`, `gh issue list`, etc.:
+
+```bash
+gh auth login
+```
+
+Follow the prompts to authenticate via browser.
+
 ### macOS System Setup
 
 #### Apple ID & iCloud
@@ -262,6 +283,11 @@ To configure apps to start at login:
 
 1. Open **System Settings → General → Login Items**
 2. Add desired apps (e.g., 1Password, Raycast, Clocker)
+
+#### Night Shift
+
+1. Open **System Settings → Displays → Night Shift**
+2. Set Schedule to "Sunset to Sunrise"
 
 ### Hardware
 

@@ -260,3 +260,25 @@ When possible, rely on the following for managing settings:
 3. **JetBrains IDEs** with Settings Sync enabled
 4. **1Password** account for password sync
 5. **Postman** account for collections sync (optional)
+
+## Installing Apps
+
+Apps should be installed using [Homebrew](https://brew.sh/) whenever possible. To see if an app is available through Homebrew, run:
+
+```
+% brew search <app_name>
+```
+
+You can also check to see if an app is already installed using:
+
+```
+% brew list <app_name>
+```
+
+To install an app, use:
+
+```
+% brew install --cask <app_name>
+```
+
+Don't forget to [export your Brewfile](#exporting-homebrew-installations) when you're done.

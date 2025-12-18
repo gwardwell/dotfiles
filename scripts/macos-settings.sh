@@ -10,6 +10,7 @@ defaults write com.apple.dock minimize-to-application -bool true
 defaults write com.apple.dock show-recents -bool false
 defaults write com.apple.dock tilesize -int 39
 defaults write com.apple.dock largesize -int 54
+defaults write com.apple.dock showhidden -bool true
 
 # Finder settings
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
@@ -19,6 +20,11 @@ defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
 defaults write com.apple.finder ShowPathbar -bool true
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+defaults write com.apple.finder ShowSidebar -bool true
+defaults write com.apple.finder NewWindowTarget -string "PfHm"
+defaults write com.apple.finder FXICloudDriveDesktop -bool false
+defaults write com.apple.finder FXICloudDriveDocuments -bool false
+defaults write com.apple.finder AppleShowAllFiles -bool true
 
 # Desktop settings
 defaults write com.apple.finder DesktopViewSettings:GroupBy -string "Kind"
@@ -45,6 +51,9 @@ defaults write NSGlobalDomain AppleInterfaceStyle -string "Dark"
 # Window settings
 defaults write NSGlobalDomain AppleMiniaturizeOnDoubleClick -bool false
 defaults write NSGlobalDomain AppleWindowTabbingMode -string "always"
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 
 # Mouse/Trackpad settings
 defaults write com.apple.driver.AppleBluetoothMultitouch.mouse MouseButtonDivision -int 55
@@ -137,6 +146,7 @@ defaults write com.apple.controlcenter "NSStatusItem Visible WiFi" -bool true
 
 # Hidden control center items
 defaults write com.apple.controlcenter "NSStatusItem Visible Sound" -bool false
+defaults write com.apple.TextInputMenu visible -bool false
 defaults write com.apple.controlcenter "NSStatusItem Visible Display" -bool false
 defaults write com.apple.controlcenter "NSStatusItem Visible FocusModes" -bool false
 
@@ -148,12 +158,16 @@ defaults write com.apple.screencapture location -string "~/Screenshots"
 defaults write com.apple.menuextra.clock IsAnalog -bool false
 defaults write com.apple.menuextra.clock ShowDate -bool true
 defaults write com.apple.menuextra.clock ShowDayOfWeek -bool true
+defaults write com.apple.menuextra.clock ShowAMPM -bool true
 
 # Hot corners
 defaults write com.apple.dock wvous-br-corner -int 4
 defaults write com.apple.dock wvous-br-modifier -int 0
 defaults write com.apple.dock wvous-tr-corner -int 6
 defaults write com.apple.dock wvous-tr-modifier -int 0
+
+# Activity Monitor settings
+defaults write com.apple.ActivityMonitor ShowCategory -int 0
 
 # Archive Utility settings
 defaults write com.apple.archiveutility "archive-info" -string "."

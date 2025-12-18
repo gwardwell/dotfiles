@@ -19,6 +19,7 @@ npm-globals.txt
 chrome/
 jetbrains/
 iTerm/
+slack/
 
 # Employer-specific config (template only, customize per machine)
 .oh-my-zsh/custom/aliases-employer.zsh

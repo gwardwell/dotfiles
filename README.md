@@ -216,6 +216,18 @@ To use Raycast as your primary launcher with `Ctrl+Space` (or the default `Cmd+S
 3. Set **Ctrl+Space** as the Raycast Hotkey (or use the default **Cmd+Space**)
 4. Sign in to enable Cloud Sync
 
+### Slack
+
+Apply custom theme:
+
+1. Open Slack → **Settings... → Appearance**
+2. Scroll down to **Theme colors**
+3. Press **Import**
+4. Paste the comma-separated hex codes from `~/dotfiles/slack/themes.json`
+5. Press **Apply**
+
+> **Note:** Slack syncs your theme across devices when signed in, so you only need to apply once per workspace.
+
 ### GitHub CLI
 
 Authenticate the GitHub CLI to use features like `gh pr create`, `gh issue list`, etc.:

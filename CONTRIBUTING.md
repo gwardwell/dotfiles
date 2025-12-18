@@ -215,6 +215,33 @@ git commit -m "chore: update JetBrains settings"
 git push
 ```
 
+### Exporting Slack Themes
+
+To save a new or updated Slack theme:
+
+1. Open Slack → **Settings... → Appearance**
+2. Scroll down to **Theme colors**
+3. Press **Share** (the comma-separated hex codes will be copied to your clipboard)
+4. Add or update the theme in `~/dotfiles/slack/themes.json`:
+
+```json
+{
+  "name": "Theme Name",
+  "description": "Brief description",
+  "theme": "#HEXCODE,#HEXCODE,#HEXCODE,#HEXCODE",
+  "notes": "Optional notes"
+}
+```
+
+5. Commit and push:
+
+```
+cd ~/dotfiles
+git add slack/
+git commit -m "chore: update Slack themes"
+git push
+```
+
 ### Updating Wallpaper
 
 To update the dynamic wallpaper:

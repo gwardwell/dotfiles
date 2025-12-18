@@ -1,0 +1,14 @@
+{
+  "themes": [
+    {
+      "name": "Darkwell",
+      "description": "Dark theme matching iTerm/IDE setup",
+      "theme": "#EAEAEA,#CBCCCF,#20A271,#EF3E41",
+      "notes": "Primary theme for all workspaces"
+    }
+  ],
+  "instructions": {
+    "apply": "Slack → Settings... → Appearance → scroll to 'Theme colors' → press 'Import' → paste the comma separated hex codes → press 'Apply'",
+    "export": "Slack → Settings... → Appearance → scroll to 'Theme colors' → press 'Share' → the comma separated hex codes will be copied to your clipboard → add them this this themes.json file as either a new theme or update an existing theme"
+  }
+}

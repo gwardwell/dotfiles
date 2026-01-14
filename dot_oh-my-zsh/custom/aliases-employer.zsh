@@ -14,11 +14,19 @@
 # ===========================================
 
 # Employer info
-EMPLOYER_NAME="example"                      # For alias naming
-EMPLOYER_GITHUB_ORG="example"                # GitHub organization (for clone function)
+
+# For alias naming
+EMPLOYER_NAME="example"
+
+# GitHub organizations (for clone function) - can be a single org or multiple orgs
+# Single org: EMPLOYER_GITHUB_ORGS=("example")
+# Multiple orgs: EMPLOYER_GITHUB_ORGS=("example" "another-org" "yet-another-org")
+EMPLOYER_GITHUB_ORGS=("example")
 
 # CI/CD
-BUILDKITE_ORG="example"                      # Buildkite organization
+# Buildkite organization
+# This is the organization that Buildkite is configured to use for the current employer.
+BUILDKITE_ORG="example"
 
 # Kubernetes contexts
 K8S_CONTEXT_DEV="dev"
@@ -267,16 +275,3 @@ function obk() {
   open "https://buildkite.com/${BUILDKITE_ORG}/$repo_name/builds?branch=$branch_name"
 }
 
-# Clone a repo - supports multi-account GitHub setups if enabled
-function clone () {
-  if [[ "$ENABLE_MULTI_GITHUB_ACCOUNTS" == "true" ]]; then
-    repo_base="personal"
-    repo=${1##git@github.com:}
-    if [[ $repo == *${EMPLOYER_GITHUB_ORG}/* ]]; then
-      repo_base="employer"
-    fi
-    git clone "${repo_base}:${repo}"
-  else
-    git clone "$1"
-  fi
-}

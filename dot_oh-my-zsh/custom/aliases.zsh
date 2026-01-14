@@ -52,8 +52,34 @@ alias unstash='git stash pop'
 alias main='checkout main'
 alias merge_main='merge origin/main'
 
-# Clone a repo (can be overridden in aliases-employer.zsh for multi-account setups)
-alias clone='git clone'
+# Clone a repo - supports multi-account GitHub setups if enabled
+# Configuration (EMPLOYER_GITHUB_ORGS and ENABLE_MULTI_GITHUB_ACCOUNTS) is defined in aliases-employer.zsh
+# Note: This function checks variables at runtime, so it works regardless of file load order
+function clone () {
+  # If multi-account is not enabled or not set, use regular git clone
+  if [[ "${ENABLE_MULTI_GITHUB_ACCOUNTS:-false}" != "true" ]]; then
+    git clone "$1"
+    return
+  fi
+
+  # Check if EMPLOYER_GITHUB_ORGS is configured
+  if [[ ! -v EMPLOYER_GITHUB_ORGS ]] || [[ ${#EMPLOYER_GITHUB_ORGS[@]} -eq 0 ]]; then
+    echo "Warning: ENABLE_MULTI_GITHUB_ACCOUNTS is enabled but EMPLOYER_GITHUB_ORGS is not configured. Falling back to regular git clone."
+    git clone "$1"
+    return
+  fi
+
+  repo_base="personal"
+  repo=${1##git@github.com:}
+  # Check if repo belongs to any employer org
+  for org in "${EMPLOYER_GITHUB_ORGS[@]}"; do
+    if [[ $repo == *${org}/* ]]; then
+      repo_base="employer"
+      break
+    fi
+  done
+  git clone "${repo_base}:${repo}"
+}
 
 # Catch an exception.  Returns 0 if the exception in question was caught.
 # The first argument gives the exception to catch, which may be a

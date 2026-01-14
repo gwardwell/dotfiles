@@ -69,21 +69,33 @@ Generates a new SSH key and stores it locally.
 
 If managing separate personal and employer GitHub accounts:
 
-**With 1Password:** Store multiple SSH keys in 1Password. Configure each with a different vault or tag.
+#### 1Password
 
-**With traditional keys:** Update `~/.ssh/config`:
+Store multiple SSH keys in 1Password in the `private` vault.
+
+The public keys for each key you plan to use should be saved to the `~/.ssh` directory.
+
+#### Update SSH Config
+
+Add the following to the `~/.ssh/config` file:
 
 ```
+# Personal GitHub
 Host personal
-    HostName github.com
-    User git
-    IdentityFile ~/.ssh/id_ed25519_personal
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/personal_ssh_key
+  IdentitiesOnly yes
 
+# Work GitHub
 Host employer
-    HostName github.com
-    User git
-    IdentityFile ~/.ssh/id_ed25519_employer
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/work_ssh_key
+  IdentitiesOnly yes
 ```
+
+#### CLI Updates
 
 There are zsh aliases in `aliases-employer.zsh` to handle flipping between these hosts.
 
@@ -237,6 +249,20 @@ gh auth login
 ```
 
 Follow the prompts to authenticate via browser.
+
+### Fonts
+
+Install the following fonts [directly from Apple](https://developer.apple.com/fonts/) by downloading the font `.dmg` files and running the installers:
+
+- [SF Compact](https://devimages-cdn.apple.com/design/resources/download/SF-Compact.dmg)
+- [SF Mono](https://devimages-cdn.apple.com/design/resources/download/SF-Mono.dmg)
+- [SF Pro](https://devimages-cdn.apple.com/design/resources/download/SF-Pro.dmg)
+
+Clone this Repo and copy the font files to `~/Library/Fonts`
+
+```
+% git clone git@github.com:shaunsingh/SFMono-Nerd-Font-Ligaturized.git
+```
 
 ### macOS System Setup
 

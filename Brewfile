@@ -1,43 +1,94 @@
-# Taps
 tap "derailed/k9s"
-
-# CLI Tools
-brew "chezmoi"
-brew "colima"
-brew "direnv"
-brew "docker"
-brew "docker-buildx"
-brew "docker-compose"
-brew "docker-credential-helper"
-brew "gh"
-brew "git"
-brew "git-lfs"
-brew "gradle"
-brew "helm"
-brew "kubectl"
-brew "kubernetes-cli"
-brew "kube-ps1"
-brew "mise"
-brew "node"
-brew "oha"
-brew "podman"
-brew "postgresql@14"
-brew "protobuf"
-brew "pyenv"
-brew "redis"
-brew "yarn"
-brew "yq"
-brew "derailed/k9s/k9s"
-
-# Fonts
 tap "shaunsingh/sfmono-nerd-font-ligaturized"
-brew "font-sf-mono-nerd-font-ligaturized"
-brew "font-sf-mono"
-brew "font-sf-mono-for-powerline"
-brew "font-sf-pro"
-brew "font-sf-compact"
-
-# VSCode Extensions
+# Library for manipulating PNG images
+brew "libpng"
+# Manage your dotfiles across multiple diverse machines, securely
+brew "chezmoi"
+# Container runtimes on MacOS (and Linux) with minimal setup
+brew "colima"
+# Load/unload environment variables based on $PWD
+brew "direnv"
+# Pack, ship and run any application as a lightweight container
+brew "docker"
+# Docker CLI plugin for extended build capabilities with BuildKit
+brew "docker-buildx"
+# Isolated development environments using Docker
+brew "docker-compose"
+# Platform keystore credential helper for Docker
+brew "docker-credential-helper"
+# GitHub command-line tool
+brew "gh"
+# Distributed revision control system
+brew "git"
+# Git extension for versioning large files
+brew "git-lfs"
+# Open-source build automation tool based on the Groovy and Kotlin DSL
+brew "gradle"
+# Kubernetes package manager
+brew "helm"
+# Kubernetes command-line interface
+brew "kubernetes-cli"
+# Kubernetes prompt info for bash and zsh
+brew "kube-ps1"
+# Polyglot runtime manager (asdf rust clone)
+brew "mise"
+# Open-source, cross-platform JavaScript runtime environment
+brew "node"
+# Selects the right Node package manager based on lockfiles
+brew "ni"
+# HTTP load generator, inspired by rakyll/hey with tui animation
+brew "oha"
+# Tool for managing OCI containers and pods
+brew "podman"
+# Object-relational database system
+brew "postgresql@14"
+# Protocol buffers (Google's data interchange format)
+brew "protobuf"
+# Python version management
+brew "pyenv"
+# Persistent key-value database, with built-in net interface
+brew "redis"
+# JavaScript package manager
+brew "yarn"
+# Process YAML, JSON, XML, CSV and properties documents from the CLI
+brew "yq"
+# Kubernetes CLI To Manage Your Clusters In Style!
+brew "derailed/k9s/k9s"
+# Password manager that keeps all passwords secure behind one password
+cask "1password"
+# Command-line interface for 1Password
+cask "1password-cli"
+# Anthropic's official Claude AI desktop app
+cask "claude"
+# Menu bar timezone tracker and compact calendar
+cask "clocker"
+# Write, edit, and chat about your code with AI
+cask "cursor"
+# Command-line agent for Cursor
+cask "cursor-cli"
+# App to build and share containerised applications and microservices
+cask "docker-desktop"
+cask "font-sf-mono-for-powerline"
+# Set of tools to manage resources and applications hosted on Google Cloud
+cask "gcloud-cli"
+# Desktop client for GitHub repositories
+cask "github"
+# Terminal emulator as alternative to Apple's Terminal app
+cask "iterm2"
+# JetBrains tools manager
+cask "jetbrains-toolbox"
+# Browse, manage, inspect containers and images
+cask "podman-desktop"
+# Collaboration platform for API development
+cask "postman"
+# Control your tools with a few keystrokes
+cask "raycast"
+# Configurable document editor that supports Markdown
+cask "typora"
+# Open-source code editor
+cask "visual-studio-code"
+# Video communication and virtual meeting platform
+cask "zoom"
 vscode "agauniyal.vscode-caniuse"
 vscode "apollographql.vscode-apollo"
 vscode "bierner.github-markdown-preview"
@@ -68,6 +119,7 @@ vscode "leizongmin.node-module-intellisense"
 vscode "miguelsolorio.fluent-icons"
 vscode "mikestead.dotenv"
 vscode "mrmlnc.vscode-duplicate"
+vscode "ms-azuretools.vscode-containers"
 vscode "ms-azuretools.vscode-docker"
 vscode "ms-kubernetes-tools.vscode-kubernetes-tools"
 vscode "ms-vscode-remote.remote-containers"
@@ -114,23 +166,3 @@ vscode "wallabyjs.quokka-vscode"
 vscode "wallabyjs.wallaby-vscode"
 vscode "wix.vscode-import-cost"
 vscode "zignd.html-css-class-completion"
-
-# Cask Apps
-cask "1password"
-cask "1password-cli"
-cask "claude"
-cask "clocker"
-cask "cursor"
-cask "cursor-cli"
-cask "docker-desktop"
-cask "github"
-cask "google-chrome"
-cask "google-cloud-sdk"
-cask "iterm2"
-cask "jetbrains-toolbox"
-cask "podman-desktop"
-cask "postman"
-cask "raycast"
-cask "typora"
-cask "visual-studio-code"
-cask "zoom"

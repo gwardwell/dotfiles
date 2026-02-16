@@ -124,10 +124,6 @@ KUBE_PS1_NS_COLOR="white"
 KUBE_PS1_BG_COLOR="blue"
 PROMPT='$(kube_ps1)'$PROMPT
 
-# Set n paths
-export N_PREFIX="$HOME/.n"
-export PATH="$N_PREFIX/bin:$PATH"
-
 if [[ $(uname -m) == "arm64" ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 else
@@ -184,6 +180,14 @@ command -v direnv &> /dev/null && eval "$(direnv hook zsh)"
 command -v mise &> /dev/null && eval "$(mise activate zsh)"
 
 PATH=~/.console-ninja/.bin:$PATH
+
+# Configure n to manage Node versions
+export N_PREFIX="$HOME/.n"
+
+# Add n's bin to PATH (node is no longer installed via Homebrew)
+if [[ -d "$N_PREFIX/bin" ]]; then
+    export PATH="$N_PREFIX/bin:$PATH"
+fi
 
 OP_AGENT="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 if [[ -S "$OP_AGENT" ]]; then

@@ -492,21 +492,62 @@ echo "🔧 Setting up n for Node version management..."
 export N_PREFIX="$HOME/.n"
 mkdir -p "$N_PREFIX"
 
+# Check if we need to bootstrap with Homebrew's node
+NEEDS_BOOTSTRAP=false
+if ! command -v npm &> /dev/null; then
+    echo "  npm not found. Temporarily installing node via Homebrew for bootstrap..."
+    NEEDS_BOOTSTRAP=true
+    # Temporarily install node if not in Brewfile (or if it was commented out)
+    if ! brew list node &>/dev/null 2>&1; then
+        brew install node
+    fi
+    # Add Homebrew's node to PATH for this session
+    if [[ $(uname -m) == "arm64" ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    else
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+fi
+
 # Install n if not already available
 if ! command -v n &> /dev/null; then
     echo "  Installing n..."
-    npm install -g n 2>/dev/null || echo "  ⚠️  Failed to install n"
+    if command -v npm &> /dev/null; then
+        npm install -g n 2>/dev/null || {
+            echo "  ⚠️  Failed to install n via npm. Trying alternative method..."
+            # Alternative: install n via curl script
+            curl -L https://git.io/n-install | bash -s -- -y 2>/dev/null || echo "  ⚠️  Failed to install n"
+        }
+    else
+        echo "  ⚠️  npm still not available. Skipping n installation."
+    fi
 fi
 
-# Install latest LTS via n (this makes n take over from Homebrew node)
+# Install Node via n (this will be the active Node version)
 if command -v n &> /dev/null; then
+    echo "  Installing Node LTS via n..."
+    export PATH="$N_PREFIX/bin:$PATH"
     n lts
 
-    # Update PATH for this session to use n's node
-    export PATH="$N_PREFIX/bin:$PATH"
+    # Verify n's node is working
+    if command -v node &> /dev/null; then
+        echo "✅ Done setting up n. n is now managing Node versions."
+        echo ""
 
-    echo "✅ Done setting up n. n is now managing Node versions."
-    echo ""
+        # If we bootstrapped with Homebrew's node, remove it now
+        if [[ "$NEEDS_BOOTSTRAP" == "true" ]] && brew list node &>/dev/null 2>&1; then
+            echo "  Removing temporary Homebrew node (n is now managing Node)..."
+            brew uninstall node 2>/dev/null || echo "  ⚠️  Could not remove Homebrew node automatically. Remove manually with: brew uninstall node"
+            echo ""
+        elif brew list node &>/dev/null 2>&1; then
+            echo "📝 Homebrew's node is installed but n is now managing Node."
+            echo "   You can remove it with: brew uninstall node"
+            echo ""
+        fi
+    else
+        echo "⚠️  n installed but node not found. You may need to restart your terminal."
+        echo ""
+    fi
 else
     echo "⚠️  n not available. Skipping Node version management setup."
     echo ""

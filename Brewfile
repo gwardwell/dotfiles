@@ -33,7 +33,8 @@ brew "kube-ps1"
 # Polyglot runtime manager (asdf rust clone)
 brew "mise"
 # Open-source, cross-platform JavaScript runtime environment
-brew "node"
+# NOTE: Node is managed by 'n' (node version manager), not Homebrew
+# brew "node"
 # Selects the right Node package manager based on lockfiles
 brew "ni"
 # HTTP load generator, inspired by rakyll/hey with tui animation

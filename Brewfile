@@ -32,9 +32,6 @@ brew "kubernetes-cli"
 brew "kube-ps1"
 # Polyglot runtime manager (asdf rust clone)
 brew "mise"
-# Open-source, cross-platform JavaScript runtime environment
-# NOTE: Node is managed by 'n' (node version manager), not Homebrew
-# brew "node"
 # Selects the right Node package manager based on lockfiles
 brew "ni"
 # HTTP load generator, inspired by rakyll/hey with tui animation
@@ -74,6 +71,8 @@ cask "font-sf-mono-for-powerline"
 cask "gcloud-cli"
 # Desktop client for GitHub repositories
 cask "github"
+# Tool to optimise images to a smaller size
+cask "imageoptim"
 # Terminal emulator as alternative to Apple's Terminal app
 cask "iterm2"
 # JetBrains tools manager
